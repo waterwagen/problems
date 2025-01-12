@@ -3,6 +3,7 @@ package com.waterwagen;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -14,6 +15,60 @@ import java.util.Random;
 import java.util.Set;
 
 public class Study {
+
+  class SimplifyPath {
+
+    public static String simplifyPath(String path) {
+      if (path.length() < 1)
+        throw new IllegalArgumentException("The specified path is empty");
+      if (path.charAt(0) != '/')
+        throw new IllegalArgumentException("The specified path does not start with /");
+
+      Deque<String> pathElements = new LinkedList<>();
+
+      int pointer = 1;
+      StringBuilder currentPathBuilder = new StringBuilder();
+      while (pointer < path.length()) {
+        char ch = path.charAt(pointer);
+        if (ch == '/') {
+          handleCurrentPath(currentPathBuilder, pathElements);
+          currentPathBuilder = new StringBuilder();
+        }
+        else
+          currentPathBuilder.append(ch);
+
+        pointer++;
+      }
+      if (!currentPathBuilder.isEmpty())
+        handleCurrentPath(currentPathBuilder, pathElements);
+
+      return buildSimplifiedPath(pathElements).toString();
+    }
+
+    private static StringBuilder buildSimplifiedPath(Deque<String> pathElements) {
+      StringBuilder simplifiedPath = new StringBuilder("/");
+      while (!pathElements.isEmpty()) {
+        simplifiedPath.append(pathElements.removeLast());
+        simplifiedPath.append("/");
+      }
+      if (simplifiedPath.length() > 1)
+        simplifiedPath.deleteCharAt(simplifiedPath.length() - 1);
+      return simplifiedPath;
+    }
+
+    private static void handleCurrentPath(StringBuilder currentPathBuilder, Deque<String> pathElements) {
+      String currentPath = currentPathBuilder.toString();
+      if (currentPath.equals("..")) {
+        if (!pathElements.isEmpty())
+          pathElements.pop();
+      }
+      else if (!currentPath.equals(".")) {
+        if (!currentPath.isBlank())
+          pathElements.push(currentPath);
+      }
+    }
+
+  }
 
   class MaximumElement {
 

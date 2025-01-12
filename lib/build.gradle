@@ -23,6 +23,7 @@ dependencies {
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation libs.guava
     testImplementation libs.hamcrest
+    testImplementation libs.assertj
 }
 
 test {

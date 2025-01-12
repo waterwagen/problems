@@ -394,7 +394,7 @@ public class Study {
 
   class TwoSumIIInputArrayIsSortedSolution {
 
-    public static int[] twoSum(int[] numbers, int target) {
+    public static int[] twoSumMapLookup(int[] numbers, int target) {
       if (numbers.length == 0) {
         return new int[0];
       }
@@ -439,43 +439,39 @@ public class Study {
       return indices;
     }
 
-    public static int[] twoSumOriginal(int[] numbers, int target) {
+    public static int[] twoSumDivideAndConquer(int[] numbers, int target) {
+      if (numbers.length <= 1) {
+        throw new IllegalArgumentException("Less than 2 numbers in the array so it's not possible to find a two sum");
+      }
+
       int pointer = 0;
       while (pointer < numbers.length - 1) {
-        int firstNum = numbers[pointer];
-        int secondNum = target - firstNum;
-        int[] arrayToSearch = Arrays.copyOfRange(numbers, pointer + 1, numbers.length);
-        int secondIndex = findIndex(arrayToSearch, secondNum, 1);
+        int secondNum = target - numbers[pointer];
+        int secondIndex = find(secondNum, numbers, pointer + 1, numbers.length - 1);
         if (secondIndex >= 0) {
           return new int[]{pointer + 1, secondIndex + 1};
         }
+        pointer++;
       }
 
-      throw new RuntimeException("Something is wrong with the supplied array");
+      return new int[0];
     }
 
-    private static int findIndex(int[] numbers, int target, int offset) {
-      if (numbers.length == 0)
-        return -1;
-      if (numbers.length == 1) {
-        if (numbers[0] == target) {
-          return 0 + offset;
+    private static int find(int target, int[] numbers, int start, int end) {
+      int elementCount = (end - start) + 1;
+      if (elementCount == 1) {
+        if (numbers[start] == target) {
+          return start;
         }
         return -1;
       }
 
-      int middleIndex = numbers.length/2;
-      int middleNum = numbers[middleIndex];
-      if (middleNum == target) {
-        return middleIndex + offset;
-      }
-      else if (target > middleNum) {
-        int[] subArray = Arrays.copyOfRange(numbers, middleIndex + 1, numbers.length);
-        return findIndex(subArray, target, offset + 1);
+      int middleIndex = start + (end - start)/2;
+      if (target > numbers[middleIndex]) {
+        return find(target, numbers, middleIndex + 1, end);
       }
       else {
-        int[] subArray = Arrays.copyOfRange(numbers, 0, middleIndex);
-        return findIndex(subArray, target, offset + 1);
+        return find(target, numbers, start, middleIndex);
       }
     }
   }

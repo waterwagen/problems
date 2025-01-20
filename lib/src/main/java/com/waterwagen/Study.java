@@ -10,11 +10,71 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
 
 public class Study {
+
+  class AddBinary {
+
+    private static final char ONE = '1';
+    private static final char ZERO = '0';
+
+    /*
+      - Create a result with a value of "0", continuously updated with the result so far
+      - For each position, starting from the right, take turns adding the digit at that position from each number to the
+      result
+      - Update logic
+        - 1. If result doesn't have digit at the position, set it to the num digit
+        - 2. Else if result and num digits are both 1, set result digit to 0 and move left in result until a zero or no
+             digit is found and set it to 1
+        - 3. Else if num digit is 1, set result digit to 1
+        - 4. Else, do nothing because num digit is zero and the result digit is unchanged no matter what it is
+     */
+    public static String addBinary(String num1, String num2) {
+      StringBuilder result = new StringBuilder(num1);
+
+      int pointer = num2.length() - 1;
+      int resultPointer = result.length() - 1;
+      while (pointer >= 0) {
+        char numChar = num2.charAt(pointer);
+        boolean noInsert = true;
+        if (resultPointer == -1) {
+          result.insert(0, numChar);
+          noInsert = false;
+        }
+        else {
+          char resultChar = result.charAt(resultPointer);
+          int carryPointer = resultPointer - 1;
+          if (numChar == ONE && resultChar == ONE) {
+            result.setCharAt(resultPointer, ZERO);
+            while (carryPointer >= 0 && result.charAt(carryPointer) == ONE) {
+              result.setCharAt(carryPointer, ZERO);
+              carryPointer--;
+            }
+            if (carryPointer < 0) {
+              result.insert(0, ONE);
+              noInsert = false;
+            }
+            else {
+              result.setCharAt(carryPointer, ONE);
+            }
+          }
+          else if (numChar == ONE) {
+            result.setCharAt(resultPointer, ONE);
+          }
+
+        }
+        if (noInsert)
+          resultPointer--;
+        pointer--;
+      }
+
+      return result.toString();
+    }
+  }
 
   class SimplifyPath {
 

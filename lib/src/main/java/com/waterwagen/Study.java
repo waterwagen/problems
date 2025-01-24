@@ -11,11 +11,36 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
 
 public class Study {
+
+  class KthLargestElement {
+
+    public static int findKthLargest(int[] nums, int k) {
+      if (nums.length < k)
+        throw new IllegalArgumentException("Can't find the " + k + "th element of nums of length " + nums.length);
+
+      PriorityQueue<Integer> orderedNums = new PriorityQueue<>();
+      for (int index = 0; index < k; index++) {
+        orderedNums.add(nums[index]);
+      }
+      for (int index = k; index < nums.length; index++) {
+        int element = nums[index];
+        int kthElement = orderedNums.peek();
+        if (kthElement < element) {
+          orderedNums.poll();
+          orderedNums.add(element);
+        }
+      }
+
+      return orderedNums.poll();
+    }
+
+  }
 
   class AddBinary {
 

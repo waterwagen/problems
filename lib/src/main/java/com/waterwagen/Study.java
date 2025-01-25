@@ -10,13 +10,94 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
 
 public class Study {
+
+  class PrimeSequence {
+
+    public static int[] getNums(int primeNumCount) {
+      if (primeNumCount < 1) {
+        throw new IllegalArgumentException("Need at least 2 nums for a sequence");
+      }
+
+      int[] result = new int[primeNumCount];
+      int resultPointer = 0;
+      int nextPrimeCandidate = 2;
+      while (resultPointer < result.length) {
+        if (isPrime(nextPrimeCandidate)) {
+          result[resultPointer++] = nextPrimeCandidate;
+        }
+        nextPrimeCandidate++;
+      }
+
+      return result;
+    }
+
+    /*
+      Skip evens except for 2 as that covers all evens
+     */
+    private static boolean isPrime(int primeCandidate) {
+      if (primeCandidate == 2) {
+        return true;
+      }
+      if (primeCandidate % 2 == 0) {
+        return false;
+      }
+
+      for (int i = 3; i*i <= primeCandidate; i = i + 2) {
+        if (primeCandidate % i == 0) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+  }
+
+  class NthFibonnaci {
+
+    public static int getNum(int fibonacciNumPosition) {
+      if (fibonacciNumPosition < 2) {
+        throw new IllegalArgumentException("Need at least 2 nums for a sequence");
+      }
+
+      int previousPreviousNum;
+      int previousNum = 0;
+      int nthFibonnaciNum = 1;
+      for (int index = 2; index < fibonacciNumPosition; index++) {
+        previousPreviousNum = previousNum;
+        previousNum = nthFibonnaciNum;
+        nthFibonnaciNum = previousPreviousNum + previousNum;
+      }
+
+      return nthFibonnaciNum;
+    }
+
+  }
+
+  class FibonnaciSequence {
+
+    public static int[] getNums(int numCount) {
+      if (numCount < 2) {
+        throw new IllegalArgumentException("Need at least 2 nums for a sequence");
+      }
+
+      int[] result = new int[numCount];
+      result[0] = 0;
+      result[1] = 1;
+      for (int index = 2; index < numCount; index++) {
+        result[index] = result[index - 1] + result[index - 2];
+      }
+
+      return result;
+    }
+
+  }
 
   class KthLargestElement {
 
